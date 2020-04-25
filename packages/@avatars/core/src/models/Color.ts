@@ -1,7 +1,7 @@
-import * as hexToRgb from 'pure-color/parse/hex';
-import * as rgbToHsv from 'pure-color/convert/rgb2hsv';
-import * as rgbToHex from 'pure-color/convert/rgb2hex';
-import * as hsvToRgb from 'pure-color/convert/hsv2rgb';
+import hexToRgb from 'pure-color/parse/hex';
+import rgbToHsv from 'pure-color/convert/rgb2hsv';
+import rgbToHex from 'pure-color/convert/rgb2hex';
+import hsvToRgb from 'pure-color/convert/hsv2rgb';
 
 export default class Color {
   public alpha: number = 1;
@@ -19,7 +19,7 @@ export default class Color {
       let match = /(.*)\((.*)\)/.exec(color);
 
       if (match) {
-        let values = match[2].split(',').map(val => parseInt(val.trim()));
+        let values = match[2].split(',').map((val) => parseInt(val.trim()));
 
         switch (match[1].trim()) {
           case 'rgb':
@@ -57,7 +57,7 @@ export default class Color {
 
     this.alpha = 1;
     this.color = {
-      rgb: rgb
+      rgb: rgb,
     };
   }
 
@@ -85,7 +85,7 @@ export default class Color {
 
     this.alpha = 1;
     this.color = {
-      hsv: hsv
+      hsv: hsv,
     };
   }
 
@@ -97,7 +97,7 @@ export default class Color {
   set hex(hex: string) {
     this.alpha = 1;
     this.color = {
-      hex: hex
+      hex: hex,
     };
   }
 
@@ -160,14 +160,14 @@ export default class Color {
   }
 
   private hexToRgb(hex: string): number[] {
-    return hexToRgb(hex).map(val => Math.round(val));
+    return hexToRgb(hex).map((val) => Math.round(val));
   }
 
   private rgbToHsv(rgb: number[]): number[] {
-    return rgbToHsv(rgb).map(val => Math.round(val));
+    return rgbToHsv(rgb).map((val) => Math.round(val));
   }
 
   private hsvToRgb(hsv: number[]): number[] {
-    return hsvToRgb(hsv).map(val => Math.round(val));
+    return hsvToRgb(hsv).map((val) => Math.round(val));
   }
 }

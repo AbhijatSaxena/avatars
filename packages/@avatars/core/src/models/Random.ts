@@ -1,4 +1,4 @@
-import * as seedrandom from 'seedrandom/seedrandom';
+import seedrandom from 'seedrandom';
 
 export default class Random {
   private prng: seedrandom.prng;
