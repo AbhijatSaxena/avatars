@@ -3,7 +3,6 @@
   "private": true,
   "dependencies": {
     "lerna": "^3.20.2",
-    "prettier": "^2.0.0",
     "wrangler": "^0.0.2"
   },
   "scripts": {

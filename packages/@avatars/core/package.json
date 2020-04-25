@@ -10,7 +10,7 @@
     "svgson": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^10.11.6",
+    "@types/node": "^13.11.1",
     "jest": "^24.8.0",
     "license-checker": "^24.0.0",
     "typescript": "^3.4.5",
