@@ -31,10 +31,10 @@
     "jdenticon": "^2.1.1"
   },
   "peerDependencies": {
-    "@avatars": "^4.0.0"
+    "@avatars/core": "^4.0.0"
   },
   "devDependencies": {
-    "@avatars": "^4.0.3",
+    "@avatars/core": "^4.0.3",
     "jdenticon": "^2.1.1",
     "typescript": "^3.4.5"
   },

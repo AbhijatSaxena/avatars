@@ -35,10 +35,10 @@
     "@avatars/male": "^4.0.3"
   },
   "peerDependencies": {
-    "@avatars": "^4.0.0"
+    "@avatars/core": "^4.0.0"
   },
   "devDependencies": {
-    "@avatars": "^4.0.3",
+    "@avatars/core": "^4.0.3",
     "typescript": "^3.4.5"
   },
   "files": [
