@@ -1,17 +1,14 @@
-declare namespace svgson {
-  interface schema {
+declare module 'svgson' {
+  export interface schema {
     name: string;
     type: string;
     value: string;
-    children: svgson.schema[];
+    children: schema[];
     attributes: {
       [key: string]: string;
     };
   }
-}
-
-declare module 'svgson' {
-  export function parse(svg: string): Promise<svgson.schema>;
-  export function parseSync(svg: string): svgson.schema;
-  export function stringify(svg: svgson.schema): string;
+  export function parse(svg: string): Promise<schema>;
+  export function parseSync(svg: string): schema;
+  export function stringify(svg: schema): string;
 }

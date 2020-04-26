@@ -1,10 +1,2 @@
-export { default as addBackground } from './addBackground';
-export { default as addHeight } from './addHeight';
-export { default as addMargin } from './addMargin';
-export { default as addRadius } from './addRadius';
-export { default as addWidth } from './addWidth';
-export { default as base64EncodeUnicode } from './base64EncodeUnicode';
-export { default as getViewbox } from './getViewbox';
-export { default as isGroupable } from './isGroupable';
-export { default as parse } from './parse';
-export { default as stringify } from './stringify';
+export * as base64 from './base64';
+export * as svg from './svg';
