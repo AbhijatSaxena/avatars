@@ -1,37 +1,44 @@
-import svgson from 'svgson';
+import type { Root, Element } from 'hast';
+import * as svgParser from 'svg-parser';
+import stringifyHast from 'hast-util-to-html';
 
-export function addBackground(svg: svgson.schema, background: string) {
+export function getSvgElement(root: svgParser.RootNode) {
+  return root.children.find((child) => {
+    return child.type == 'element' && child.tagName == 'svg';
+  });
+}
+
+export function addBackground(svg: Element, background: string) {
   let viewBox = getViewbox(svg);
 
   svg.children.unshift({
-    name: 'rect',
     type: 'element',
-    value: '',
+    tagName: 'rect',
     children: [],
-    attributes: {
+    properties: {
       fill: background,
-      width: viewBox.width.toString(),
-      height: viewBox.height.toString(),
-      x: viewBox.x.toString(),
-      y: viewBox.y.toString(),
+      width: viewBox.width,
+      height: viewBox.height,
+      x: viewBox.x,
+      y: viewBox.y,
     },
   });
 
   return this;
 }
 
-export function addHeight(svg: svgson.schema, height: number) {
-  svg.attributes['height'] = height.toString();
+export function addHeight(svg: Element, height: number) {
+  svg.properties['height'] = height;
 
   return this;
 }
 
-export function addMargin(svg: svgson.schema, margin: number) {
+export function addMargin(svg: Element, margin: number) {
   let viewBox = getViewbox(svg);
-  let groupable: svgson.schema[] = [];
+  let groupable: Element[] = [];
 
   svg.children = svg.children.filter((child) => {
-    if (isGroupable(child)) {
+    if (child.type == 'element' && isGroupable(child)) {
       groupable.push(child);
 
       return false;
@@ -41,36 +48,34 @@ export function addMargin(svg: svgson.schema, margin: number) {
   });
 
   svg.children.push({
-    name: 'g',
     type: 'element',
-    value: '',
+    tagName: 'g',
     children: [
       {
-        name: 'g',
         type: 'element',
+        tagName: 'g',
         value: '',
         children: [
           {
-            name: 'rect',
             type: 'element',
-            value: '',
+            tagName: 'rect',
             children: [],
-            attributes: {
+            properties: {
               fill: 'none',
-              width: viewBox.width.toString(),
-              height: viewBox.height.toString(),
-              x: viewBox.x.toString(),
-              y: viewBox.y.toString(),
+              width: viewBox.width,
+              height: viewBox.height,
+              x: viewBox.x,
+              y: viewBox.y,
             },
           },
           ...groupable,
         ],
-        attributes: {
+        properties: {
           transform: `scale(${1 - (margin * 2) / 100})`,
         },
       },
     ],
-    attributes: {
+    properties: {
       transform: `translate(${(viewBox.width * margin) / 100}, ${(viewBox.height * margin) / 100})`,
     },
   });
@@ -78,12 +83,12 @@ export function addMargin(svg: svgson.schema, margin: number) {
   return this;
 }
 
-export function addRadius(svg: svgson.schema, radius: number) {
+export function addRadius(svg: Element, radius: number) {
   let viewBox = getViewbox(svg);
-  let groupable: svgson.schema[] = [];
+  let groupable: Element[] = [];
 
   svg.children = svg.children.filter((child) => {
-    if (isGroupable(child)) {
+    if (child.type == 'element' && isGroupable(child)) {
       groupable.push(child);
 
       return false;
@@ -94,36 +99,33 @@ export function addRadius(svg: svgson.schema, radius: number) {
 
   svg.children.push(
     {
-      name: 'mask',
       type: 'element',
-      value: '',
+      tagName: 'mask',
       children: [
         {
-          name: 'rect',
           type: 'element',
-          value: '',
+          tagName: 'rect',
           children: [],
-          attributes: {
-            width: viewBox.width.toString(),
-            height: viewBox.height.toString(),
-            rx: ((viewBox.width * radius) / 100).toString(),
-            ry: ((viewBox.height * radius) / 100).toString(),
+          properties: {
+            width: viewBox.width,
+            height: viewBox.height,
+            rx: (viewBox.width * radius) / 100,
+            ry: (viewBox.height * radius) / 100,
             fill: '#fff',
-            x: viewBox.x.toString(),
-            y: viewBox.y.toString(),
+            x: viewBox.x,
+            y: viewBox.y,
           },
         },
       ],
-      attributes: {
+      properties: {
         id: 'avatarsRadiusMask',
       },
     },
     {
-      name: 'g',
       type: 'element',
-      value: '',
+      tagName: 'g',
       children: groupable,
-      attributes: {
+      properties: {
         mask: `url(#avatarsRadiusMask)`,
       },
     }
@@ -132,14 +134,14 @@ export function addRadius(svg: svgson.schema, radius: number) {
   return this;
 }
 
-export function addWidth(svg: svgson.schema, width: number) {
-  svg.attributes['width'] = width.toString();
+export function addWidth(svg: Element, width: number) {
+  svg.properties['width'] = width;
 
   return this;
 }
 
-export function getViewbox(svg: svgson.schema) {
-  let viewBox = svg.attributes['viewBox'].split(' ');
+export function getViewbox(svg: Element) {
+  let viewBox = svg.properties['viewBox'].split(' ');
   let x = parseInt(viewBox[0]);
   let y = parseInt(viewBox[1]);
   let width = parseInt(viewBox[2]);
@@ -153,14 +155,14 @@ export function getViewbox(svg: svgson.schema) {
   };
 }
 
-export function isGroupable(element: svgson.schema) {
-  return element.type === 'element' && ['title', 'desc', 'defs', 'metadata'].indexOf(element.name) === -1;
+export function isGroupable(element: Element) {
+  return ['title', 'desc', 'defs', 'metadata'].indexOf(element.tagName) === -1;
 }
 
-export function parse(svg: string | svgson.schema) {
-  return typeof svg === 'string' ? svgson.parseSync(svg) : svg;
+export function parse(svg: string | svgParser.RootNode) {
+  return typeof svg === 'string' ? svgParser.parse(svg) : svg;
 }
 
-export function stringify(svg: string | svgson.schema) {
-  return typeof svg === 'string' ? svg : svgson.stringify(svg);
+export function stringify(svg: string | svgParser.RootNode) {
+  return typeof svg === 'string' ? svg : stringifyHast(svg);
 }

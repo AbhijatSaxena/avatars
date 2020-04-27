@@ -1,17 +1,16 @@
-import type { schema } from 'svgson';
-
-import { Random } from './models';
 import * as svg from './utils/svg';
 import * as base64 from './utils/base64';
+import * as prng from './utils/prng';
 
 export type Options = {
   [id: string]: any;
 };
 
-export type Style = (random: Random, options?: Options) => string | schema;
+export type Style = (random: prng.Prng, options?: Options) => string | schema;
 
 export function create(style: Style, seed: string, options: Options = {}) {
-  let avatar = svg.parse(style(new Random(seed), options));
+  let avatar = svg.parse(style(prng.create(seed), options));
+  let svgElement = svg.getSvgElement(avatar);
 
   if (options.width) {
     svg.addWidth(avatar, options.width);
