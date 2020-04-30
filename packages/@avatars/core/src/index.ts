@@ -1,4 +1,4 @@
-export * from './core';
+/// <reference types="../typings/svgson" />
 
+export * from './core';
 export * as utils from './utils';
-export * as models from './models';

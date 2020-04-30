@@ -1,4 +1,4 @@
-import Prando from 'prando';
+const seedrandom = require('seedrandom');
 
 export type Prng = {
   seed: string;
@@ -8,18 +8,19 @@ export type Prng = {
 };
 
 export function create(seed: string): Prng {
-  let prng = new Prando(seed);
+  const prng = seedrandom(seed);
+  const integer = (min: number, max: number) => Math.floor(prng() * (max - min + 1) + min);
 
   return {
     seed,
     bool(likelihood: number = 50) {
-      return prng.next(0, 100) < likelihood;
+      return prng() * 100 < likelihood;
     },
     integer(min: number, max: number) {
-      return prng.nextInt(min, max);
+      return integer(min, max);
     },
     pick<T>(arr: T[]): T {
-      return prng.nextArrayItem(arr);
+      return arr[integer(0, arr.length - 1)];
     },
   };
 }
