@@ -3,13 +3,20 @@ import * as base64 from './utils/base64';
 import * as prng from './utils/prng';
 import * as svgson from 'svgson';
 
-export type Options = {
-  [id: string]: any;
-};
+export interface IOptions {
+  width: number;
+  height: number;
+  margin: number;
+  background: string;
+  radius: number;
+  base64: boolean;
+}
 
-export type Style = (random: prng.Prng, options?: Options) => string | svgson.INode;
+export interface IStyle<O = {}> {
+  (prng: prng.IPrng, options: Partial<O & IOptions>): string | svgson.INode;
+}
 
-export function create(style: Style, seed: string, options: Options = {}) {
+export function create<O = {}>(style: IStyle<O>, seed: string, options: Partial<O & IOptions> = {}) {
   let avatar = svg.parse(style(prng.create(seed), options));
 
   if (options.width) {

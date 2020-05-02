@@ -1,33 +1,29 @@
-import type { Random, Options as OptionsContainer } from '@avatars/core';
+import type { IStyle } from '@avatars/core';
 import qrImage from 'qr-image';
 
-type Options = OptionsContainer<{
-  type?: string;
+type IOptions = {
   color?: string;
   correctionLevel?: 'L' | 'M' | 'Q' | 'H';
-}>;
+};
 
-export default function (random: Random, options: Options) {
-  options.setDefaults(
-    {
-      type: 'qr',
-      color: '#000',
-      correctionLevel: 'M',
-    },
-    false
-  );
+const Style: IStyle<IOptions> = function (prng, options) {
+  options = {
+    correctionLevel: 'M',
+    color: '#000',
+    ...options,
+  };
 
   let svg = qrImage
-    .imageSync(random.seed, {
+    .imageSync(prng.seed, {
       type: 'svg',
-      ec_level: options.get('correctionLevel'),
+      ec_level: options.correctionLevel,
       margin: 0,
     })
     .toString();
 
-  if (options.has('color')) {
-    svg = svg.replace('<path ', `<path fill="${options.get('color')}" `);
-  }
+  svg = svg.replace('<path ', `<path fill="${options.color}" `);
 
   return svg;
-}
+};
+
+export default Style;

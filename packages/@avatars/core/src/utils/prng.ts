@@ -1,13 +1,13 @@
 const seedrandom = require('seedrandom');
 
-export type Prng = {
+export interface IPrng {
   seed: string;
   bool(likelihood?: number): boolean;
   integer(min: number, max: number): number;
   pick<T>(arr: T[]): T;
-};
+}
 
-export function create(seed: string): Prng {
+export function create(seed: string): IPrng {
   const prng = seedrandom(seed);
   const integer = (min: number, max: number) => Math.floor(prng() * (max - min + 1) + min);
 
