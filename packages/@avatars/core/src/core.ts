@@ -7,7 +7,7 @@ export type Options = {
   [id: string]: any;
 };
 
-export type Style = (random: prng.Prng, options?: Options) => string | svgson.schema;
+export type Style = (random: prng.Prng, options?: Options) => string | svgson.INode;
 
 export function create(style: Style, seed: string, options: Options = {}) {
   let avatar = svg.parse(style(prng.create(seed), options));

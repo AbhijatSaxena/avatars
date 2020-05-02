@@ -1,6 +1,6 @@
 import * as svgson from 'svgson';
 
-export function addBackground(svg: svgson.schema, background: string) {
+export function addBackground(svg: svgson.INode, background: string) {
   let viewBox = getViewbox(svg);
 
   svg.children.unshift({
@@ -20,15 +20,15 @@ export function addBackground(svg: svgson.schema, background: string) {
   return this;
 }
 
-export function addHeight(svg: svgson.schema, height: number) {
+export function addHeight(svg: svgson.INode, height: number) {
   svg.attributes['height'] = height.toString();
 
   return this;
 }
 
-export function addMargin(svg: svgson.schema, margin: number) {
+export function addMargin(svg: svgson.INode, margin: number) {
   let viewBox = getViewbox(svg);
-  let groupable: svgson.schema[] = [];
+  let groupable: svgson.INode[] = [];
 
   svg.children = svg.children.filter((child) => {
     if (isGroupable(child)) {
@@ -78,9 +78,9 @@ export function addMargin(svg: svgson.schema, margin: number) {
   return this;
 }
 
-export function addRadius(svg: svgson.schema, radius: number) {
+export function addRadius(svg: svgson.INode, radius: number) {
   let viewBox = getViewbox(svg);
-  let groupable: svgson.schema[] = [];
+  let groupable: svgson.INode[] = [];
 
   svg.children = svg.children.filter((child) => {
     if (child.type == 'element' && isGroupable(child)) {
@@ -132,13 +132,13 @@ export function addRadius(svg: svgson.schema, radius: number) {
   return this;
 }
 
-export function addWidth(svg: svgson.schema, width: number) {
+export function addWidth(svg: svgson.INode, width: number) {
   svg.attributes['width'] = width.toString();
 
   return this;
 }
 
-export function getViewbox(svg: svgson.schema) {
+export function getViewbox(svg: svgson.INode) {
   let viewBox = svg.attributes['viewBox'].split(' ');
   let x = parseInt(viewBox[0]);
   let y = parseInt(viewBox[1]);
@@ -153,14 +153,14 @@ export function getViewbox(svg: svgson.schema) {
   };
 }
 
-export function isGroupable(element: svgson.schema) {
+export function isGroupable(element: svgson.INode) {
   return element.type == 'element' && ['title', 'desc', 'defs', 'metadata'].indexOf(element.name) === -1;
 }
 
-export function parse(svg: string | svgson.schema) {
+export function parse(svg: string | svgson.INode) {
   return typeof svg === 'string' ? svgson.parseSync(svg) : svg;
 }
 
-export function stringify(svg: string | svgson.schema) {
+export function stringify(svg: string | svgson.INode) {
   return typeof svg === 'string' ? svg : svgson.stringify(svg);
 }

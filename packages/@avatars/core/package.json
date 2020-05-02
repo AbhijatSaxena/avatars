@@ -5,10 +5,10 @@
   "main": "dist/avatars.cjs.js",
   "module": "dist/avatars.esm.js",
   "browser": "dist/avatars.min.js",
-  "types": "dist/types/index.d.ts",
+  "types": "types/index.d.ts",
   "dependencies": {
     "seedrandom": "^3.0.5",
-    "svgson": "^4.0.0"
+    "svgson": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
@@ -16,7 +16,6 @@
     "@babel/plugin-proposal-object-rest-spread": "7.9.0",
     "@babel/preset-env": "7.9.0",
     "@babel/preset-typescript": "7.9.0",
-    "@rollup/plugin-alias": "^3.1.0",
     "@rollup/plugin-typescript": "^4.1.1",
     "@types/seedrandom": "^2.4.28",
     "babel-plugin-module-resolver": "^4.0.0",
@@ -25,6 +24,7 @@
     "rollup": "2.3.3",
     "rollup-plugin-auto-external": "^2.0.0",
     "rollup-plugin-babel": "4.4.0",
+    "rollup-plugin-banner": "^0.2.1",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-terser": "^5.3.0",
@@ -32,9 +32,9 @@
   },
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build:tsc": "tsc",
     "type-check:watch": "npm run type-check -- --watch",
-    "build:types": "tsc --emitDeclarationOnly",
+    "build:tsc": "tsc",
+    "build:types": "tsc --emitDeclarationOnly --outDir types",
     "build:js": "rollup -c",
     "build": "npm run build:types && npm run build:js"
   },
@@ -57,8 +57,7 @@
   "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/avatars#readme",
   "files": [
     "dist",
-    "lib",
-    "typings"
+    "types"
   ],
   "publishConfig": {
     "access": "public"
