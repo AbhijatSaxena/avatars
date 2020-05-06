@@ -1,5 +1,5 @@
-import type { Random } from '@avatars/core';
-import { ColorCollection } from '@avatars/core';
+import type { IStyle } from '@avatars/core';
+import colors from 'material-colors/dist/colors.json';
 import Options from './options';
 
 import eyesCollection from './eyes';
@@ -17,29 +17,24 @@ const group = (random: Random, content: string, chance: number, x: number, y: nu
   return '';
 };
 
-export default function (random: Random, options: Options) {
-  options.setDefaults(
-    {
-      colors: [],
-      primaryColorLevel: 600,
-      secondaryColorLevel: 400,
-      colorful: false,
-      mouthChance: 100,
-      sidesChance: 100,
-      textureChance: 50,
-      topChange: 100,
-    },
-    false
-  );
+const style: IStyle<Options> = function (random, options) {
+  options = {
+    colors: [],
+    primaryColorLevel: 600,
+    secondaryColorLevel: 400,
+    colorful: false,
+    mouthChance: 100,
+    sidesChance: 100,
+    textureChance: 50,
+    topChange: 100,
+    ...options,
+  };
 
-  let colorCollection = new ColorCollection();
-  let primaryColors = colorCollection.get(options.get('primaryColorLevel'));
-  let secondaryColors = colorCollection.get(options.get('secondaryColorLevel'));
+  let primaryColors = Object.keys(colors).map((color) => color[options.primaryColorLevel]);
+  let secondaryColors = Object.keys(colors).map((color) => color[options.secondaryColorLevel]);
 
   // Select colors that occur in both color levels.
-  let possibleColors = Object.keys(primaryColors)
-    .filter((name) => secondaryColors[name])
-    .filter((name) => options.get('colors', [name]).includes(name));
+  let possibleColors = primaryColors.filter((name) => (options.colors || [name]).includes(name));
 
   let primaryColorName = random.pickone(possibleColors);
   let secondaryColorName = options.get('colorful') ? random.pickone(possibleColors) : primaryColorName;
@@ -64,4 +59,6 @@ export default function (random: Random, options: Options) {
     group(random, eyes(), 100, 38, 76),
     '</svg>'
   ].join('');
-}
+};
+
+export default style;

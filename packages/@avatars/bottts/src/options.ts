@@ -1,6 +1,4 @@
-import { Options as OptionsContainer } from '@avatars/core';
-
-type Options = OptionsContainer<{
+export default interface Options {
   colors?: string[];
   primaryColorLevel?: number;
   secondaryColorLevel?: number;
@@ -9,6 +7,4 @@ type Options = OptionsContainer<{
   sidesChance?: number;
   textureChance?: number;
   topChange?: number;
-}>;
-
-export default Options;
+}
